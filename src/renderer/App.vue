@@ -74,13 +74,13 @@
           }.bind(this), 750);
         })
         .then(() => this.uploadAsync())
-        .then((upload_result) => {
-          console.log('load program result: ' + upload_result);
-          this.loading.feedback = upload_result;
-        })
         .finally(() => {
           clearInterval(this.interval);
           this.loading.inProgress = false
+        })
+        .then((upload_result) => {
+          console.log('load program result: ' + upload_result);
+          this.loading.feedback = upload_result;
         })
       },
       uploadAsync: function () {
@@ -91,11 +91,16 @@
       },
       uploadResult: function (event, arg) {
         console.log('upload result called!')
+        this.loading.async_result(arg)
+        delete this.loading.async_result;
       },
       bumpLoading: function () {
         console.log('loading bump!');
+        if (this.loading.feedback.length >= this.loading.maxFeedback) {
+          this.resetLoadingFeedback()
+          return;
+        }
         this.loading.feedback += ".";
-        if (this.loading.feedback.length > this.loading.maxFeedback) this.resetLoadingFeedback()
       },
       resetLoadingFeedback: function () {
         this.loading.feedback = this.loading.initialFeedback;
