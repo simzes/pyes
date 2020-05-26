@@ -119,7 +119,8 @@ class Catalog {
       for (const file of entry_files) {
         yield {
           entry: entry,
-          relative_path: path.join(entry.label, entry[file])
+          relative_path: path.join(entry.label, entry[file]),
+          property: file,
         }
       }
     }
@@ -137,12 +138,9 @@ class Catalog {
   localize_catalog() {
     const prefix = this.is_preinstalled ? '' : 'file://'
 
-    for (const entry of this.entries) {
-      for (const file_field of this.REQUIRED_FILES) {
-        if (!entry[file_field]) {
-          continue;
-        }
-        entry[file_field] = prefix + path.join(this.source_path, entry.label, entry[file_field])
+    for (var {entry, relative_path, property} of this._files()) {
+      if (property == 'image') {
+        entry[property] = prefix + path.join(this.source_path, relative_path)
       }
     }
   }
