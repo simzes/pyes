@@ -73,7 +73,7 @@
             this.bumpLoading()
           }.bind(this), 750);
         })
-        .then(() => this.uploadAsync())
+        .then(() => this.uploadSend())
         .finally(() => {
           clearInterval(this.interval);
           this.loading.inProgress = false
@@ -83,13 +83,13 @@
           this.loading.feedback = upload_result;
         })
       },
-      uploadAsync: function () {
+      uploadSend: function () {
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
-          this.$electron.ipcRenderer.send('load_program', this.selection.label);
+          this.$electron.ipcRenderer.send('upload', this.selection.label);
         });
       },
-      uploadResult: function (event, arg) {
+      uploadReply: function (event, arg) {
         console.log('upload result called!')
         this.loading.async_result(arg)
         delete this.loading.async_result;
@@ -116,7 +116,7 @@
       }
     },
     mounted: function () {
-      this.$electron.ipcRenderer.on('load_program_result', this.uploadResult);
+      this.$electron.ipcRenderer.on('upload_reply', this.uploadReply);
       this.catalog = this.$electron.ipcRenderer.sendSync('catalog');
     }
   }

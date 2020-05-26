@@ -289,9 +289,9 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-ipcMain.on('load_program', async (event, program_label) => {
+ipcMain.on('upload', async (event, program_label) => {
   console.log('loading program with label: ' + program_label);
 
-  await sleep(2000);
-  event.sender.send('load_program_result', "donezoes!");
+  await sleep(2500);
+  event.sender.send('upload_reply', "donezoes!");
 });
