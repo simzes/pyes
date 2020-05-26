@@ -86,7 +86,7 @@
       uploadSend: function () {
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
-          this.$electron.ipcRenderer.send('upload', this.selection.label);
+          this.$electron.ipcRenderer.send('upload', this.selection.binary);
         });
       },
       uploadReply: function (event, arg) {

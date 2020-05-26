@@ -4,6 +4,8 @@ const axios = require('axios')
 const jetpack = require('fs-jetpack')
 const path = require('path')
 
+const Avrgirl = require('avrgirl-arduino');
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -288,9 +290,29 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-ipcMain.on('upload', async (event, program_label) => {
-  console.log('loading program with label: ' + program_label);
+ipcMain.on('upload', async (event, program_path) => {
+  console.log('loading program with label: ' + program_path);
 
-  await sleep(2500);
-  event.sender.send('upload_reply', "donezoes!");
+
+  var avrgirl = new Avrgirl({
+    board: 'leonardo'
+  });
+
+  new Promise((resolve, reject) => {
+    if (!jetpack.exists(program_path)) {
+      reject("path doesn't exist: " + program_path);
+    }
+
+    avrgirl.flash(program_path, function (error) {
+      if (error) {
+        console.log('load program error: ' + error)
+        reject(error);
+      } else {
+        console.log('load program success: done')
+        resolve('Done');
+      }
+    })
+  })
+  .then(msg => event.sender.send('upload_reply', msg))
+  .catch(err_msg => event.sender.send('upload_reply', "" + err_msg))
 });
