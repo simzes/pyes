@@ -17,6 +17,11 @@
       <button v-on:click="upload">
         Upload
       </button>
+      <div class="uploadFeedback">
+        <p>
+          {{ loading.feedback }}
+        </p>
+      </div>
       <div class="selectionTile">
         <h3> {{ selection.title }} </h3>
         <p class="selectionDescription">
@@ -37,20 +42,8 @@
       return {
         stuff: "stuff2",
         selection: { title: "stuff", description: "more stuff" },
-        catalog: [
-          {
-            label: "elephant",
-            title: "Elephant Bitty",
-            image: "static/elephant.jpg",
-            description: "what is an elephant even?",
-          },
-          {
-            label: "donkey",
-            title: "Donkey Bitty",
-            image: "static/donkey.jpg",
-            description: "what is a donkey even?",
-          }
-        ]
+        loading: { inProgress: false, feedback: "", initialFeedback: "Loading...", maxFeedback: 20 },
+        catalog: []
       }
     },
     methods: {
@@ -59,23 +52,49 @@
         this.selection = this.entryFromLabel(label);
       },
       upload: function () {
-        console.log("upload!");
-        if (this.selection.label) {
-          this.uploadAsync();
+        if (!this.selection.label) {
+          console.log("nothing selected! can't upload");
+          return;
         }
-      },
-      uploadAsync: async function () {
+
+        if (this.loading.inProgress) {
+          console.log("loading already in progress! can't interrupt");
+          return;
+        }
+
+        console.log("upload!");
+        this.loading.inProgress = true;
+
+        Promise.resolve()
+        .then(() => {
+          this.resetLoadingFeedback();
+
           this.interval = setInterval(function () {
             this.bumpLoading()
           }.bind(this), 750);
-
-        return new Promise((resolve, reject) => {
-          console.log('load program result: ' + this.$electron.ipcRenderer.sendSync('load_program', this.selection.label));
-          clearInterval(this.interval);
         })
+        .then(() => this.uploadAsync())
+        .then((upload_result) => {
+          console.log('load program result: ' + upload_result);
+          this.loading.feedback = upload_result;
+        })
+        .finally(() => {
+          clearInterval(this.interval);
+          this.loading.inProgress = false
+        })
+      },
+      uploadAsync: async function () {
+        return new Promise((resolve, reject) => {
+          resolve(this.$electron.ipcRenderer.sendSync('load_program', this.selection.label));
+        });
       },
       bumpLoading: function () {
         console.log('loading bump!');
+        this.loading.feedback += ".";
+        if (this.loading.feedback.length > this.loading.maxFeedback) this.resetLoadingFeedback()
+      },
+      resetLoadingFeedback: function () {
+        this.loading.feedback = this.loading.initialFeedback;
       },
       entryFromLabel: function (label) {
         for (var entry of this.catalog)

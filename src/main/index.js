@@ -285,7 +285,12 @@ ipcMain.on('catalog', async (event) => {
   event.returnValue = catalog.entries
 });
 
-ipcMain.on('load_program', (event, program_label) => {
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+ipcMain.on('load_program', async (event, program_label) => {
   console.log('loading program with label: ' + program_label);
-  event.returnValue = "load program result";
+  await sleep(2000);
+  event.returnValue = "donezoes!";
 });
