@@ -148,8 +148,8 @@ class Catalog {
   }
 
   move_catalog(dest_path) {
-//    jetpack.remove(dest_path);
-//    jetpack.move(this.source_path, dest_path);
+    jetpack.remove(dest_path);
+    jetpack.move(this.source_path, dest_path);
 
     delete this.contents;
   }
@@ -202,13 +202,19 @@ async function find_catalog() {
     any newly downloaded catalog into the current updated catalog.
   */
   return load_catalog(Catalog.downloaded_path)
-    .then(async (catalog) => {
+    .then((catalog) => {
       console.log("have newly downloaded catalog -- moving into updated catalog")
-      catalog.move_catalog(catalog.updated_path);
-      return load_catalog(catalog.updated_path);
+      catalog.move_catalog(Catalog.updated_path);
+      return load_catalog(Catalog.updated_path);
     })
-    .catch(error => load_catalog(Catalog.updated_path))
-    .catch(error => load_catalog(Catalog.preinstalled_path))
+    .catch((error) => {
+      console.log("error with newly downloaded catalog -- using the updated catalog")
+      return load_catalog(Catalog.updated_path)
+    })
+    .catch((error) => {
+      console.log("error with updated catalog -- using the preinstalled catalog")
+      return load_catalog(Catalog.preinstalled_path, true)
+    })
     .finally((catalog) => {
       // kick off download attempt of catalog
       load_remote_catalog();
@@ -227,11 +233,11 @@ function load_remote_catalog() {
 
   return download_catalog_path(catalog_url, dest_base, index_path)
     .then(() => {
-      console.log('downloaded catalog index successfully');
+      //console.log('downloaded catalog index successfully');
 
       const catalog = load_catalog(dest_base, false, catalog_url);
 
-      console.log("catalog contents: " + JSON.stringify(catalog.catalog))
+      //console.log("catalog contents: " + JSON.stringify(catalog.catalog))
 
       return catalog;
     }).catch((error) => {
@@ -248,11 +254,11 @@ function download_catalog_path(base_url, base_path, download_path) {
   const source_url = base_url + download_path;
   const dest_path = path.join(base_path, download_path);
 
-  console.log("requesting: " + source_url + "\n    into: " + dest_path)
+  //console.log("requesting: " + source_url + "\n    into: " + dest_path)
 
   return axios.get(source_url, {responseType: 'arraybuffer'})
    .then(response => {
-      console.log("download for " + dest_path + " successful: " + response.status);
+      //console.log("download for " + dest_path + " successful: " + response.status);
       jetpack.write(dest_path, response.data);
       return dest_path;
     }).catch(error => {
@@ -273,6 +279,8 @@ const data_path = app.getPath('userData');
 ipcMain.on('catalog', async (event) => {
   console.log('loading catalog for window');
   const catalog = await find_catalog()
+
+  console.log('using catalog sourced from: ' + catalog.source_path)
 
   event.returnValue = catalog.entries
 });
