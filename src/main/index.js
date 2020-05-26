@@ -139,8 +139,9 @@ class Catalog {
     const prefix = this.is_preinstalled ? '' : 'file://'
 
     for (var {entry, relative_path, property} of this._files()) {
+      entry[property] = path.join(this.source_path, relative_path)
       if (property == 'image') {
-        entry[property] = prefix + path.join(this.source_path, relative_path)
+        entry[property] = prefix + entry[property]
       }
     }
   }
