@@ -291,6 +291,7 @@ function sleep(ms) {
 
 ipcMain.on('load_program', async (event, program_label) => {
   console.log('loading program with label: ' + program_label);
+
   await sleep(2000);
-  event.returnValue = "donezoes!";
+  event.sender.send('load_program_result', "donezoes!");
 });
