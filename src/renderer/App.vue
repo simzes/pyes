@@ -2,16 +2,16 @@
   <div id="app">
     <h3> {{ selection ? selection.title : "" }} </h3>
     <div class="catalogPane">
-      <template v-for="entry in catalog.entries">
-        <div class="entryTile">
-          <p> {{ entry.title }} </p>
-          <p> label: {{ entry.label }} </p>
-          <img v-bind:src="entry.image"
-               v-on:click="entrySelect(entry.label)"
-          />
-          <p> description: {{ entry.description }} </p>
-        </div>
-      </template>
+        <template v-for="entry in catalog.entries">
+          <div class="entryTile">
+            <p> {{ entry.title }} </p>
+            <p> label: {{ entry.label }} </p>
+            <img v-bind:src="entry.image"
+                 v-on:click="entrySelect(entry.label)"
+            />
+            <p> description: {{ entry.description }} </p>
+          </div>
+        </template>
     </div>
     <div class="selectionPane">
       <button v-on:click="upload">
@@ -22,12 +22,12 @@
           {{ loading.feedback }}
         </p>
       </div>
-      <div class="selectionTile">
-        <h3> {{ selection.title }} </h3>
-        <p class="selectionDescription">
-          {{ selection.description }}
-        </p>
-      </div>
+        <div class="selectionTile">
+          <h3> {{ selection.entry.title }} </h3>
+          <p class="selectionDescription">
+            {{ selection.entry.description }}
+          </p>
+        </div>
     </div>
   </div>
 </template>
