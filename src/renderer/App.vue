@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h3> {{ selection ? selection.title : "" }} </h3>
+    <h3> {{ selection.entry.title }} </h3>
     <div class="catalogPane">
         <template v-for="entry in catalog.entries">
           <div class="entryTile">
@@ -37,13 +37,12 @@
   const {  ipcRenderer } = require('electron');
 
   export default {
-    name: 'ToDos',
+    name: 'catalog',
     data: () => {
       return {
-        stuff: "stuff2",
-        selection: { title: "stuff", description: "more stuff" },
+        selection: null,
         loading: { inProgress: false, feedback: "", initialFeedback: "Loading...", maxFeedback: 20 },
-        catalog: []
+        catalog: null,
         /* Catalog example:
         [
           {
@@ -61,10 +60,19 @@
     methods: {
       entrySelect: function (label) {
         console.log("selected: " + label);
-        this.selection = this.entryFromLabel(label);
+        this.selection = {
+          entry: this.entryFromLabel(label),
+          uploadable: true,
+        }
+      },
+      entryDeselect: function () {
+        this.selection = {
+          entry: this.catalog.landing,
+          uploadable: false,
+        }
       },
       upload: function () {
-        if (!this.selection.label) {
+        if (!this.selection.uploadable) {
           console.log("nothing selected! can't upload");
           return;
         }
@@ -74,7 +82,7 @@
           return;
         }
 
-        console.log("upload!");
+        console.log("uploading: " + this.selection);
         this.loading.inProgress = true;
 
         Promise.resolve()
@@ -98,7 +106,7 @@
       uploadSend: function () {
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
-          this.$electron.ipcRenderer.send('upload', this.selection);
+          this.$electron.ipcRenderer.send('upload', this.selection.entry);
         });
       },
       uploadReply: function (event, arg) {
@@ -127,9 +135,13 @@
         console.log('handling catalog: ' + catalog);
       }
     },
+    created: function() {
+      this.catalog = this.$electron.ipcRenderer.sendSync('catalog');
+      this.entryDeselect();
+    },
     mounted: function () {
       this.$electron.ipcRenderer.on('upload_reply', this.uploadReply);
-      this.catalog = this.$electron.ipcRenderer.sendSync('catalog');
+
     }
   }
 </script>
