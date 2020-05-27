@@ -2,7 +2,7 @@
   <div id="app">
     <h3> {{ selection ? selection.title : "" }} </h3>
     <div class="catalogPane">
-      <template v-for="entry in catalog">
+      <template v-for="entry in catalog.entries">
         <div class="entryTile">
           <p> {{ entry.title }} </p>
           <p> label: {{ entry.label }} </p>
@@ -44,6 +44,18 @@
         selection: { title: "stuff", description: "more stuff" },
         loading: { inProgress: false, feedback: "", initialFeedback: "Loading...", maxFeedback: 20 },
         catalog: []
+        /* Catalog example:
+        [
+          {
+            label: "unique label", // the path to the folder where this entry is
+            title: "text about the folder", // the text to use if markdown is not present
+            image: "image src", // the path to use in an image element
+            description: "html from markdown", // the html to include in the entry description
+            binary: "path/to/hexfile", // the path to the program binary
+          },
+          ...
+        ]
+        */
       }
     },
     methods: {
@@ -86,7 +98,7 @@
       uploadSend: function () {
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
-          this.$electron.ipcRenderer.send('upload', this.selection.binary);
+          this.$electron.ipcRenderer.send('upload', this.selection);
         });
       },
       uploadReply: function (event, arg) {
@@ -106,7 +118,7 @@
         this.loading.feedback = this.loading.initialFeedback;
       },
       entryFromLabel: function (label) {
-        for (var entry of this.catalog)
+        for (var entry of this.catalog.entries)
           if (label === entry.label)
             return entry;
         return null;

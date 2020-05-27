@@ -106,7 +106,7 @@ class Catalog {
   }
 
   get entries() {
-    return this.contents.catalog
+    return this.contents.entries
   }
 
   * _files(entry_files=null) {
@@ -283,16 +283,16 @@ ipcMain.on('catalog', async (event) => {
 
   console.log('using catalog sourced from: ' + catalog.source_path)
 
-  event.returnValue = catalog.entries
+  event.returnValue = catalog.contents
 });
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-ipcMain.on('upload', async (event, program_path) => {
+ipcMain.on('upload', async (event, catalog_entry) => {
+  const program_path = catalog_entry.binary
   console.log('loading program with label: ' + program_path);
-
 
   var avrgirl = new Avrgirl({
     board: 'leonardo'

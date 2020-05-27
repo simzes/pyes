@@ -1,17 +1,22 @@
 {
-  "catalog": [
-  {
-    "label": "elephant",
-    "title": "Wish I was an elephant-bitty",
-    "image": "elephant.jpg",
-    "description": "what is an elephant even?",
-    "binary": "elephant.hex"
+  "landing": {
+    "title": "info about my application",
+    "description": "some basic info"
   },
-  {
-    "label": "donkey",
-    "title": "Wish I was a donkey-bitty",
-    "image": "donkey.jpg",
-    "description": "what is a donkey even?",
-    "binary": "donkey.hex"
-  }
-]}
+  "entries": [
+    {
+      "label": "elephant",
+      "title": "Wish I was an elephant-bitty",
+      "image": "elephant.jpg",
+      "description": "what is an elephant even?",
+      "binary": "elephant.hex"
+    },
+    {
+      "label": "donkey",
+      "title": "Wish I was a donkey-bitty",
+      "image": "donkey.jpg",
+      "description": "what is a donkey even?",
+      "binary": "donkey.hex"
+    }
+  ]
+}
