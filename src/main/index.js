@@ -97,6 +97,13 @@ class Catalog {
       for (const {entry, property} of this._properties()) {
         agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.label, entry[property])));
       }
+    } else {
+      for (var {entry, property} of this._properties()) {
+        const file_path = path.join(this.source_path, entry.label, entry[property])
+        if (!jetpack.exists(file_path)) {
+          console.log(`Missing catalog file: ${file_path}`);
+        }
+      }
     }
 
     return Promise.all(agg);
@@ -129,12 +136,6 @@ class Catalog {
   }
 
   validate_catalog() {
-    for (var {entry, property} of this._properties()) {
-      const file_path = path.join(this.source_path, entry.label, entry[property])
-      if (!jetpack.exists(file_path)) {
-        console.log(`Missing catalog file: ${file_path}`);
-      }
-    }
   }
 
   localize_catalog() {
