@@ -90,7 +90,7 @@ class Catalog {
     this.contents = jetpack.read(path.join(this.source_path, 'index.json'), 'json');
   }
 
-  load_remote_contents() {
+  load_contents() {
     let agg = []
 
     if (this.remote_source) {
@@ -185,7 +185,7 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
   return Promise.resolve()
     .then(() => catalog.validate_catalog())
-    .then(() => catalog.load_remote_contents())
+    .then(() => catalog.load_contents())
     .then(() => {
       console.log("validating/localizing content")
 
