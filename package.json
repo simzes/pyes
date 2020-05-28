@@ -51,6 +51,7 @@
     }
   },
   "dependencies": {
+    "ajv": "^6.12.2",
     "avrgirl-arduino": "^4.2.3",
     "axios": "^0.19.2",
     "fs-jetpack": "^2.4.0",
@@ -59,7 +60,7 @@
     "vue-electron": "^1.0.6"
   },
   "devDependencies": {
-    "ajv": "^6.5.0",
+    "ajv-cli": "^3.2.1",
     "babel-core": "^6.26.3",
     "babel-loader": "^7.1.4",
     "babel-minify-webpack-plugin": "^0.3.1",
