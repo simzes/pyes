@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "required": ["entries"],
+  "properties": {
+    "landing": {
+      "type": "object",
+      "required": ["title", "description"],
+      "properties": {
+        "title": {"type": "string"},
+        "description": {"type": "string"}
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label", "title", "image", "description", "binary"],
+        "properties": {
+          "label": {"type": "string"},
+          "title": {"type": "string"},
+          "image": {"type": "string"},
+          "description": {"type": "string"},
+          "binary": {"type": "string"}
+        }
+      }
+    }
+  }
+}
