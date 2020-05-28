@@ -182,11 +182,12 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
   const catalog = new Catalog(source, is_preinstalled, remote_source);
 
-  return catalog.load_remote_contents()
+  return Promise.resolve()
+    .then(() => catalog.validate_catalog())
+    .then(() => catalog.load_remote_contents())
     .then(() => {
       console.log("validating/localizing content")
 
-      catalog.validate_catalog();
       catalog.localize_catalog();
       catalog.convert_markdown();
 
