@@ -239,6 +239,10 @@ async function find_catalog() {
       console.log("error with updated catalog -- using the preinstalled catalog")
       return load_catalog(Catalog.preinstalled_path, true)
     })
+    .catch(() => {
+      // catalog or null
+      return null;
+    })
     .finally((catalog) => {
       // kick off download attempt of catalog
       load_remote_catalog();
@@ -269,8 +273,6 @@ function load_remote_catalog() {
       console.log(error.stack);
 
       jetpack.remove(dest_base);
-
-      throw error;
     });
 }
 
@@ -304,9 +306,13 @@ ipcMain.on('catalog', async (event) => {
   console.log('loading catalog for window');
   const catalog = await find_catalog()
 
-  console.log('using catalog sourced from: ' + catalog.source_path)
-
-  event.returnValue = catalog.contents
+  if (catalog) {
+    console.log('UI using catalog sourced from: ' + catalog.source_path)
+    event.returnValue = catalog.contents
+  } else {
+    console.log('no valid catalog found for UI')
+    event.returnValue = catalog
+  }
 });
 
 function sleep(ms) {
