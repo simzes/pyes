@@ -5,6 +5,7 @@ const jetpack = require('fs-jetpack')
 const path = require('path')
 
 const Avrgirl = require('avrgirl-arduino');
+const showdown  = require('showdown');
 
 /**
  * Set `__static` path to static files in production
@@ -77,7 +78,7 @@ app.on('ready', () => {
 class Catalog {
   REQUIRED_FILES = [
     'image',
-//    'description',
+    'description',
     'binary',
   ]
 
@@ -147,6 +148,15 @@ class Catalog {
     }
   }
 
+  convert_markdown() {
+    const converter = new showdown.Converter();
+
+    for (var {entry, property} of this._properties(["description"])) {
+      const markdown_contents = jetpack.read(entry[property])
+      entry.markdown = converter.makeHtml(markdown_contents)
+    }
+  }
+
   move_catalog(dest_path) {
     jetpack.remove(dest_path);
     jetpack.move(this.source_path, dest_path);
@@ -178,6 +188,7 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
       catalog.validate_catalog();
       catalog.localize_catalog();
+      catalog.convert_markdown();
 
       console.log('Catalog loaded and validated successfully');
       console.log('Catalog path: ' + catalog.source_path)

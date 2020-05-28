@@ -9,7 +9,7 @@
             <img v-bind:src="entry.image"
                  v-on:click="entrySelect(entry.label)"
             />
-            <p> description: {{ entry.description }} </p>
+            <div v-html="entry.markdown"></div>
           </div>
         </template>
     </div>
@@ -24,9 +24,8 @@
       </div>
         <div class="selectionTile">
           <h3> {{ selection.entry.title }} </h3>
-          <p class="selectionDescription">
-            {{ selection.entry.description }}
-          </p>
+          <div v-html="selection.entry.markdown" class="selectionDescription">
+          </div>
         </div>
     </div>
   </div>
@@ -69,6 +68,7 @@
         this.selection = {
           entry: this.catalog.landing,
           uploadable: false,
+          markdown: ""
         }
       },
       upload: function () {
