@@ -93,8 +93,8 @@ class Catalog {
     let agg = []
 
     if (this.remote_source) {
-      for (const {entry, relative_path} of this._files()) {
-        agg.push(download_catalog_path(this.remote_source, this.source_path, relative_path));
+      for (const {entry, property} of this._properties()) {
+        agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.label, entry[property])));
       }
     }
 
@@ -109,28 +109,27 @@ class Catalog {
     return this.contents.entries
   }
 
-  * _files(entry_files=null) {
+  * _properties(entry_properties=null) {
     /*
-      returns an iterator over all the files in the catalog, with the form {entry: entry, relative_path: <path>}
+      returns an iterator over all the entries in the catalog, with form {entry: entry, relative_path: <path>}
     */
-    if (entry_files == null) {
-      entry_files = this.REQUIRED_FILES
+    if (entry_properties == null) {
+      entry_properties = this.REQUIRED_FILES
     }
 
     for (const entry of this.entries) {
-      for (const file of entry_files) {
+      for (const prop of entry_properties) {
         yield {
           entry: entry,
-          relative_path: path.join(entry.label, entry[file]),
-          property: file,
+          property: prop,
         }
       }
     }
   }
 
   validate_catalog() {
-    for (var {entry, relative_path} of this._files()) {
-      const file_path = path.join(this.source_path, relative_path)
+    for (var {entry, property} of this._properties()) {
+      const file_path = path.join(this.source_path, entry.label, entry[property])
       if (!jetpack.exists(file_path)) {
         console.log(`Missing catalog file: ${file_path}`);
       }
@@ -140,8 +139,8 @@ class Catalog {
   localize_catalog() {
     const prefix = this.is_preinstalled ? '' : 'file://'
 
-    for (var {entry, relative_path, property} of this._files()) {
-      entry[property] = path.join(this.source_path, relative_path)
+    for (var {entry, property} of this._properties()) {
+      entry[property] = path.join(this.source_path, entry.label, entry[property])
       if (property == 'image') {
         entry[property] = prefix + entry[property]
       }
