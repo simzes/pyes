@@ -101,7 +101,7 @@ class Catalog {
       for (var {entry, property} of this._properties()) {
         const file_path = path.join(this.source_path, entry.label, entry[property])
         if (!jetpack.exists(file_path)) {
-          console.log(`Missing catalog file: ${file_path}`);
+          throw `Missing catalog file: ${file_path}`;
         }
       }
     }
@@ -136,6 +136,7 @@ class Catalog {
   }
 
   validate_catalog() {
+    if (!this.catalog) throw "no catalog found";
   }
 
   localize_catalog() {
