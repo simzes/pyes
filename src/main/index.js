@@ -209,7 +209,7 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
       return catalog;
     }).catch((error) => {
-      console.log('error in catalog creation:' + error)
+      console.log('error in catalog creation: ' + error)
       console.log(error.stack)
 
       throw error;
