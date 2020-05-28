@@ -7,6 +7,8 @@ const path = require('path')
 const Avrgirl = require('avrgirl-arduino');
 const showdown  = require('showdown');
 
+const Ajv = require('ajv');
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -137,6 +139,14 @@ class Catalog {
 
   validate_catalog() {
     if (!this.catalog) throw "no catalog found";
+
+    const schema = jetpack.read("static/catalog_schema.json", "json")
+
+    const ajv = new Ajv();
+    const valid = ajv.validate(schema, this.contents);
+
+    if (!valid) throw "catalog invalid";
+    console.log("catalog index passed validation");
   }
 
   localize_catalog() {
