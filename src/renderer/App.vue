@@ -269,6 +269,7 @@ video {
   height: 100vh;
   width: calc(100% - 380px);
 
+  padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
 
@@ -282,17 +283,21 @@ video {
 }
 
 .entryTile {
-  height: 260px;
-  width: 240px;
-
   padding-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+
   margin-left: 10px;
   margin-right: 10px;
 
   align-self: baseline;
   flex-basis: auto;
+
+  display: block;
+  align-content: center;
+  align-items: center;
 }
 
 .selectedEntryTile {
@@ -303,6 +308,8 @@ video {
 .entryImage {
   height: 200px;
   width: 200px;
+
+  align-self: center;
 }
 
 .selectionPane {
