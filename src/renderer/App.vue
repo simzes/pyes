@@ -261,7 +261,6 @@ body {
 }
 
 .appWindow {
-  background-color: #292929;
 }
 
 .catalogPane {
@@ -284,8 +283,6 @@ body {
 
   align-items: baseline;
   align-content: baseline;
-
-  background-color: #292929;
 }
 
 .entryTile {
@@ -331,8 +328,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: left;
-
-  background-color: #292929;
 }
 
 .uploadButton {
