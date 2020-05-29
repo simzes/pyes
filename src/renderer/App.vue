@@ -144,5 +144,156 @@
   }
 </script>
 <style>
-  /* CSS */
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  /* Prevent font scaling in landscape while allowing user zoom */
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  font-family: "Droid Sans Fallback", sans-serif;
+  vertical-align: baseline;
+
+  text-align: left;
+  overflow-wrap: break-word;
+
+  background-color: #292929;
+  color: white;
+}
+
+.appWindow {
+}
+
+.catalogPane {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  height: 100vh;
+  width: calc(100% - 380px);
+
+  padding-left: 20px;
+  padding-right: 20px;
+
+  display: flex;
+  justify-content: left;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  align-items: baseline;
+  align-content: baseline;
+}
+
+.entryTile {
+  height: 260px;
+  width: 240px;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  align-self: baseline;
+  flex-basis: auto;
+}
+
+.entryImage {
+  height: 200px;
+  width: 200px;
+}
+
+.selectionPane {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  height: 100vh;
+  width: 340px;
+}
+
 </style>
