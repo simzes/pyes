@@ -251,8 +251,6 @@ video {
   font-family: "Droid Sans Fallback", sans-serif;
   vertical-align: baseline;
 
-  text-align: left;
-  overflow-wrap: break-word;
   color: white;
 }
 
@@ -268,13 +266,12 @@ body {
   top: 0;
   left: 0;
 
-  height: 100vh;
+  height: 100%;
   width: calc(100% - 380px);
 
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 20px;
-  padding-right: 20px;
 
   display: flex;
   justify-content: left;
@@ -286,20 +283,17 @@ body {
 }
 
 .entryTile {
+  height: auto;
+  width: 240px;
+
   padding-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 20px;
   padding-left: 10px;
   padding-right: 10px;
 
-  margin-left: 10px;
-  margin-right: 10px;
-
-  align-self: baseline;
-  flex-basis: auto;
-
-  display: block;
-  align-content: center;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
@@ -311,8 +305,10 @@ body {
 .entryImage {
   height: 200px;
   width: 200px;
+}
 
-  align-self: center;
+.entryTitle {
+  width: 200px;
 }
 
 .selectionPane {
@@ -320,14 +316,18 @@ body {
   top: 0;
   right: 0;
 
+  height: 100%;
   width: 340px;
 
   padding-top: 30px;
   padding-bottom: 30px;
+  padding-left: 15px;
 
   display: flex;
   flex-direction: column;
   align-items: left;
+
+  background-color: #292929;
 }
 
 .uploadButton {
