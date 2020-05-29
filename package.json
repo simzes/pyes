@@ -24,7 +24,9 @@
       "output": "build"
     },
     "files": [
-      "dist/electron/**/*"
+      "dist/electron/**/*",
+      "./static/**",
+      "./static/**/*"
     ],
     "dmg": {
       "contents": [
