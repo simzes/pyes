@@ -4,6 +4,7 @@
   "author": "simon <dev@simonsbench.net>",
   "description": "",
   "license": null,
+  "homepage": "https://www.hedgeproject.org/progcat",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder -l",
