@@ -2,7 +2,7 @@
   <div id="app" class="appWindow">
     <div class="catalogPane">
         <template v-for="entry in catalog.entries">
-          <div class="entryTile">
+          <div v-bind:class="entry._cssClass">
             <img v-bind:src="entry.image"
                  v-on:click="entrySelect(entry.label)"
                  class="entryImage"
@@ -57,16 +57,29 @@
     methods: {
       entrySelect: function (label) {
         console.log("selected: " + label);
+
+        this.resetEntrySelect();
+
+        const entry = this.entryFromLabel(label);
+        entry._cssClass += " selectedEntryTile";
+
         this.selection = {
-          entry: this.entryFromLabel(label),
+          entry: entry,
           uploadable: true,
         }
       },
       entryDeselect: function () {
+        this.resetEntrySelect();
+
         this.selection = {
           entry: this.catalog.landing,
           uploadable: false,
           markdown: ""
+        }
+      },
+      resetEntrySelect: function () {
+        for (const entry of this.catalog.entries) {
+          entry._cssClass = "entryTile";
         }
       },
       upload: function () {
@@ -280,6 +293,11 @@ video {
 
   align-self: baseline;
   flex-basis: auto;
+}
+
+.selectedEntryTile {
+  outline: solid;
+  outline-color: #4baecb;
 }
 
 .entryImage {
