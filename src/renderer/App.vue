@@ -258,6 +258,7 @@ video {
 
 body {
   background-color: #292929;
+  overflow-x: hidden;
 }
 
 h3 {
@@ -277,7 +278,7 @@ p {
   left: 0;
 
   height: 100%;
-  width: calc(100% - 380px);
+  width: calc(100% - 360px);
 
   padding-top: 20px;
   padding-bottom: 20px;
@@ -368,14 +369,22 @@ p {
 }
 
 .selectionTile {
-  width: 100%;
+  width: calc(100% - 20px);
   padding-left: 15px;
   padding-top: 15px;
+
+  display: flex;
+  flex-direction: column;
 }
 
 .selectionTitle {
   width: calc(100% - 15px);
   padding-bottom: 10px;
+}
+
+.selectionDescription {
+  flex-shrink: 2;
+  padding-bottom: 20px;
 }
 
 </style>
