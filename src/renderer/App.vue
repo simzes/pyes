@@ -12,19 +12,21 @@
         </template>
     </div>
     <div class="selectionPane">
-      <button v-on:click="upload" class="uploadButton">
-        Upload
-      </button>
-      <div class="uploadFeedback">
-        <p>
-          {{ loading.feedback }}
-        </p>
-      </div>
-        <div class="selectionTile">
-          <h3 class="entryTitle selectionTitle"> {{ selection.entry.title }} </h3>
-          <div v-html="selection.entry.markdown" class="selectionDescription">
-          </div>
+      <div class="uploadBlock">
+        <button v-on:click="upload" class="uploadButton">
+          <h3 class="uploadText">Upload</h3>
+        </button>
+        <div class="uploadFeedback">
+          <p>
+            {{ loading.feedback }}
+          </p>
         </div>
+      </div>
+      <div class="selectionTile">
+        <h3 class="selectionTitle"> {{ selection.entry.title }} </h3>
+        <div v-html="selection.entry.markdown" class="selectionDescription">
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -258,6 +260,14 @@ body {
   background-color: #292929;
 }
 
+h3 {
+  font-size: 14pt;
+}
+
+p {
+  font-size: 12pt;
+}
+
 .appWindow {
 }
 
@@ -308,6 +318,7 @@ body {
 }
 
 .entryTitle {
+  padding-top: 10px;
   width: 200px;
 }
 
@@ -321,7 +332,6 @@ body {
 
   padding-top: 30px;
   padding-bottom: 30px;
-  padding-left: 15px;
 
   display: flex;
   flex-direction: column;
@@ -330,11 +340,16 @@ body {
   background-color: #292929;
 }
 
+.uploadBlock {
+  height: auto;
+  width: 100%;
+
+  padding-left: 10px;
+}
+
 .uploadButton {
   height: 65px;
   width: 85%;
-
-  margin-bottom: 30px;
 
   border: none;
   border-radius: 5pt;
@@ -345,6 +360,22 @@ body {
 
 .uploadButton:active {
   background-color: #4baecb;
+}
+
+.uploadFeedback {
+  min-height: 40px;
+  padding-top: 15px;
+}
+
+.selectionTile {
+  width: 100%;
+  padding-left: 15px;
+  padding-top: 15px;
+}
+
+.selectionTitle {
+  width: calc(100% - 15px);
+  padding-bottom: 10px;
 }
 
 </style>
