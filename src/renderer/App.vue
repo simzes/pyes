@@ -253,12 +253,15 @@ video {
 
   text-align: left;
   overflow-wrap: break-word;
-
-  background-color: #292929;
   color: white;
 }
 
+body {
+  background-color: #292929;
+}
+
 .appWindow {
+  background-color: #292929;
 }
 
 .catalogPane {
@@ -281,6 +284,8 @@ video {
 
   align-items: baseline;
   align-content: baseline;
+
+  background-color: #292929;
 }
 
 .entryTile {
@@ -326,6 +331,8 @@ video {
   display: flex;
   flex-direction: column;
   align-items: left;
+
+  background-color: #292929;
 }
 
 .uploadButton {
