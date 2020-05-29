@@ -270,6 +270,7 @@ video {
   width: calc(100% - 380px);
 
   padding-top: 20px;
+  padding-bottom: 20px;
   padding-left: 20px;
   padding-right: 20px;
 
@@ -317,8 +318,31 @@ video {
   top: 0;
   right: 0;
 
-  height: 100vh;
   width: 340px;
+
+  padding-top: 30px;
+  padding-bottom: 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.uploadButton {
+  height: 65px;
+  width: 85%;
+
+  margin-bottom: 30px;
+
+  border: none;
+  border-radius: 5pt;
+  outline: 0;
+
+  background-color: #ff00fe;
+}
+
+.uploadButton:active {
+  background-color: #4baecb;
 }
 
 </style>
