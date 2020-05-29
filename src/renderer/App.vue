@@ -1,20 +1,18 @@
 <template>
-  <div id="app">
-    <h3> {{ selection.entry.title }} </h3>
+  <div id="app" class="appWindow">
     <div class="catalogPane">
         <template v-for="entry in catalog.entries">
           <div class="entryTile">
-            <p> {{ entry.title }} </p>
-            <p> label: {{ entry.label }} </p>
             <img v-bind:src="entry.image"
                  v-on:click="entrySelect(entry.label)"
+                 class="entryImage"
             />
-            <div v-html="entry.markdown"></div>
+            <h3 class="entryTitle"> {{ entry.title }} </h3>
           </div>
         </template>
     </div>
     <div class="selectionPane">
-      <button v-on:click="upload">
+      <button v-on:click="upload" class="uploadButton">
         Upload
       </button>
       <div class="uploadFeedback">
@@ -23,7 +21,7 @@
         </p>
       </div>
         <div class="selectionTile">
-          <h3> {{ selection.entry.title }} </h3>
+          <h3 class="entryTitle selectionTitle"> {{ selection.entry.title }} </h3>
           <div v-html="selection.entry.markdown" class="selectionDescription">
           </div>
         </div>
