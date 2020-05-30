@@ -15,6 +15,8 @@ const Ajv = require('ajv');
  */
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+} else {
+  global.__static = './static';
 }
 
 let mainWindow
@@ -56,6 +58,8 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+const app_config = jetpack.read(path.join(__static, './config.json'), 'json');
 
 /**
  * Auto Updater
@@ -138,19 +142,20 @@ class Catalog {
   }
 
   validate_catalog() {
-    if (!this.catalog) throw "no catalog found";
+    const schema = jetpack.read(path.join(__static, "catalog_schema.json"), "json");
 
-    const schema = jetpack.read("static/catalog_schema.json", "json")
+    if (!this.catalog) throw "no catalog found";
+    if (!schema) throw "no schema found";
 
     const ajv = new Ajv();
-    const valid = ajv.validate(schema, this.contents);
+    const valid = ajv.validate(schema, this.catalog);
 
     if (!valid) throw "catalog invalid";
     console.log("catalog index passed validation");
   }
 
   localize_catalog() {
-    const prefix = this.is_preinstalled ? '' : 'file://'
+    const prefix = 'file://';
 
     for (var {entry, property} of this._properties()) {
       entry[property] = path.join(this.source_path, entry.label, entry[property])
@@ -177,7 +182,7 @@ class Catalog {
   }
 
   static get preinstalled_path() {
-    return 'static/catalog';
+    return path.join(__static, 'catalog');
   }
 
   static get updated_path() {
