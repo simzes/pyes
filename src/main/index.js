@@ -316,7 +316,7 @@ ipcMain.on('catalog', async (event) => {
     event.returnValue = catalog.contents
   } else {
     console.log('no valid catalog found for UI')
-    event.returnValue = catalog
+    event.returnValue = null
   }
 });
 
