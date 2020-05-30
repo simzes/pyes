@@ -233,6 +233,11 @@ async function find_catalog() {
     As side effects, this kicks off a new download attempt, and also consolidates
     any newly downloaded catalog into the current updated catalog.
   */
+  if (app_config.github.use_catalog === false) {
+    return load_catalog(Catalog.preinstalled_path, true)
+    .catch(() => null);
+  }
+
   return load_catalog(Catalog.downloaded_path)
     .then((catalog) => {
       console.log("have newly downloaded catalog -- moving into updated catalog")
