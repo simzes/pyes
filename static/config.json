@@ -1,4 +1,7 @@
 {
+  "window":  {
+    "title": "your title here (from config)"
+  },
   "github": {
     "use_catalog": true,
     "username": "simzes",

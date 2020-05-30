@@ -35,7 +35,8 @@ function createWindow () {
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false
-    }
+    },
+    title: app_config.window.title || "progcat_arduino",
   })
 
   mainWindow.loadURL(winURL)
