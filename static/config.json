@@ -1,6 +1,8 @@
 {
   "window":  {
-    "title": "your title here (from config)"
+    "title": "your title here (from config)",
+    "width": 900,
+    "height": 600
   },
   "github": {
     "use_catalog": true,
