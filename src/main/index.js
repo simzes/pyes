@@ -262,7 +262,9 @@ function load_remote_catalog() {
   /*
     Check the catalog for updates, downloading it into the downloaded path if it has changed
   */
-  const catalog_url = "https://raw.githubusercontent.com/simzes/test-bitty-catalog/test-progcat/";
+  const {username, repository, branch} = app_config.github
+
+  const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
   const index_path = 'index.json';
 
   const dest_base = Catalog.downloaded_path;
