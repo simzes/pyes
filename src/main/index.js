@@ -36,6 +36,7 @@ function createWindow () {
       webSecurity: false
     },
     title: app_config.window.title || "progcat_arduino",
+    icon: path.join(__static, "../", "icons", "icon.png"),
   })
 
   mainWindow.loadURL(winURL)
