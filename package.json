@@ -21,7 +21,8 @@
     "productName": "progcat_arduino",
     "appId": "org.hedgeproject.progcat_arduino",
     "directories": {
-      "output": "build"
+      "output": "build",
+      "buildResources": "icons"
     },
     "files": [
       "dist/electron/**/*",
@@ -44,15 +45,15 @@
       ]
     },
     "mac": {
-      "icon": "build/icons/icon.icns"
+      "icon": "build/icons/mac_icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "icons/windows_icon.ico"
     },
     "linux": {
       "category": "Utility",
       "target": "deb",
-      "icon": "build/icons"
+      "icon": "icons"
     }
   },
   "dependencies": {
