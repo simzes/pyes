@@ -104,6 +104,9 @@ class Catalog {
     let agg = []
 
     if (this.remote_source) {
+      if (this.contents.landing) {
+        agg.push(download_catalog_path(this.remote_source, this.source_path, this.contents.landing.description))
+      }
       for (const {entry, property} of this._properties()) {
         agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.path, entry[property])));
       }
@@ -171,6 +174,13 @@ class Catalog {
 
   convert_markdown() {
     const converter = new showdown.Converter();
+
+    if (this.contents.landing) {
+      const markdown_contents = jetpack.read(path.join(this.source_path, this.contents.landing.description))
+      this.contents.landing.markdown = converter.makeHtml(markdown_contents)
+    } else {
+      this.catalog.landing = { title: "", markdown: "" }
+    }
 
     for (var {entry, property} of this._properties(["description"])) {
       const markdown_contents = jetpack.read(entry[property])

@@ -1,7 +1,7 @@
 {
   "landing": {
     "title": "info about my application",
-    "description": "some basic info"
+    "description": "landing.md"
   },
   "upload": {
     "board": "leonardo"
