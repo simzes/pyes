@@ -236,7 +236,10 @@ async function find_catalog() {
   */
   if (app_config.remote_catalog.enable_updates === false) {
     return load_catalog(Catalog.preinstalled_path, true)
-    .catch(() => null);
+      .catch((error) => {
+        console.log('error with preinstalled catalog: ' + error)
+        return null;
+      });
   }
 
   return load_catalog(Catalog.downloaded_path)
@@ -253,8 +256,9 @@ async function find_catalog() {
       console.log("error with updated catalog -- using the preinstalled catalog")
       return load_catalog(Catalog.preinstalled_path, true)
     })
-    .catch(() => {
+    .catch((error) => {
       // catalog or null
+      console.log('error with preinstalled catalog: ' + error)
       return null;
     })
     .finally((catalog) => {
