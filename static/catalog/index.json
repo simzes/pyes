@@ -3,6 +3,9 @@
     "title": "info about my application",
     "description": "some basic info"
   },
+  "upload": {
+    "board": "leonardo"
+  },
   "entries": [
     {
       "path": "elephant",

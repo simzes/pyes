@@ -119,7 +119,7 @@
       uploadSend: function () {
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
-          this.$electron.ipcRenderer.send('upload', this.selection.entry);
+          this.$electron.ipcRenderer.send('upload', this.selection.entry, this.catalog);
         });
       },
       uploadReply: function (event, arg) {

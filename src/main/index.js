@@ -340,17 +340,18 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-ipcMain.on('upload', async (event, catalog_entry) => {
-  const program_title = catalog_entry.title
-  const program_path = catalog_entry.binary
-
-  console.log(`loading program "${program_title}" from path: ${program_path}`);
-
-  var avrgirl = new Avrgirl({
-    board: 'leonardo'
-  });
-
+ipcMain.on('upload', async (event, catalog_entry, catalog) => {
   new Promise((resolve, reject) => {
+    const program_title = catalog_entry.title
+    const program_path = catalog_entry.binary
+    const upload_board = catalog.upload.board
+
+    console.log(`loading program "${program_title}" from path: ${program_path} onto board: ${upload_board}`);
+
+    var avrgirl = new Avrgirl({
+      board: upload_board
+    });
+
     if (!jetpack.exists(program_path)) {
       reject("path doesn't exist: " + program_path);
     }

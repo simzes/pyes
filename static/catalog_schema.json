@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "required": ["entries"],
+  "required": ["entries", "upload"],
   "properties": {
     "landing": {
       "type": "object",
@@ -8,6 +8,12 @@
       "properties": {
         "title": {"type": "string"},
         "description": {"type": "string"}
+      }
+    },
+    "upload": {
+      "type": "object",
+      "properties": {
+        "upload": {"type": "string"}
       }
     },
     "entries": {
