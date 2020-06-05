@@ -14,11 +14,11 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["label", "title", "image", "description", "binary"],
+        "required": ["path", "title", "icon", "description", "binary"],
         "properties": {
-          "label": {"type": "string"},
+          "path": {"type": "string"},
           "title": {"type": "string"},
-          "image": {"type": "string"},
+          "icon": {"type": "string"},
           "description": {"type": "string"},
           "binary": {"type": "string"}
         }

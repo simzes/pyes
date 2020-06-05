@@ -4,8 +4,8 @@
     "width": 900,
     "height": 600
   },
-  "github": {
-    "use_catalog": true,
+  "remote_catalog": {
+    "enable_updates": true,
     "username": "simzes",
     "repository": "test-bitty-catalog",
     "branch": "test-progcat"

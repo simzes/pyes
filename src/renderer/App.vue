@@ -3,8 +3,8 @@
     <div class="catalogPane">
         <template v-for="entry in catalog.entries">
           <div v-bind:class="entry._cssClass">
-            <img v-bind:src="entry.image"
-                 v-on:click="entrySelect(entry.label)"
+            <img v-bind:src="entry.icon"
+                 v-on:click="entrySelect(entry.path)"
                  class="entryImage"
             />
             <h3 class="entryTitle"> {{ entry.title }} </h3>
@@ -45,9 +45,9 @@
         /* Catalog example:
         [
           {
-            label: "unique label", // the path to the folder where this entry is
+            path: "unique label", // the path to the folder where this entry is
             title: "text about the folder", // the text to use if markdown is not present
-            image: "image src", // the path to use in an image element
+            icon: "image src", // the path to use in an image element
             description: "html from markdown", // the html to include in the entry description
             binary: "path/to/hexfile", // the path to the program binary
           },
@@ -57,12 +57,12 @@
       }
     },
     methods: {
-      entrySelect: function (label) {
-        console.log("selected: " + label);
+      entrySelect: function (path) {
+        console.log("selected: " + path);
 
         this.resetEntrySelect();
 
-        const entry = this.entryFromLabel(label);
+        const entry = this.entryFromPath(path);
         entry._cssClass += " selectedEntryTile";
 
         this.selection = {
@@ -138,9 +138,9 @@
       resetLoadingFeedback: function () {
         this.loading.feedback = this.loading.initialFeedback;
       },
-      entryFromLabel: function (label) {
+      entryFromPath: function (path) {
         for (var entry of this.catalog.entries)
-          if (label === entry.label)
+          if (path === entry.path)
             return entry;
         return null;
       },

@@ -5,16 +5,16 @@
   },
   "entries": [
     {
-      "label": "elephant",
+      "path": "elephant",
       "title": "Wish I was an elephant-bitty",
-      "image": "elephant.jpg",
+      "icon": "elephant.jpg",
       "description": "elephant.md",
       "binary": "elephant.hex"
     },
     {
-      "label": "donkey",
+      "path": "donkey",
       "title": "Wish I was a donkey-bitty",
-      "image": "donkey.jpg",
+      "icon": "donkey.jpg",
       "description": "donkey.md",
       "binary": "donkey.hex"
     }

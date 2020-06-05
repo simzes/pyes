@@ -87,7 +87,7 @@ app.on('ready', () => {
 
 class Catalog {
   REQUIRED_FILES = [
-    'image',
+    'icon',
     'description',
     'binary',
   ]
@@ -105,11 +105,11 @@ class Catalog {
 
     if (this.remote_source) {
       for (const {entry, property} of this._properties()) {
-        agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.label, entry[property])));
+        agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.path, entry[property])));
       }
     } else {
       for (var {entry, property} of this._properties()) {
-        const file_path = path.join(this.source_path, entry.label, entry[property])
+        const file_path = path.join(this.source_path, entry.path, entry[property])
         if (!jetpack.exists(file_path)) {
           throw `Missing catalog file: ${file_path}`;
         }
@@ -162,8 +162,8 @@ class Catalog {
     const prefix = 'file://';
 
     for (var {entry, property} of this._properties()) {
-      entry[property] = path.join(this.source_path, entry.label, entry[property])
-      if (property == 'image') {
+      entry[property] = path.join(this.source_path, entry.path, entry[property])
+      if (property == 'icon') {
         entry[property] = prefix + entry[property]
       }
     }
@@ -234,7 +234,7 @@ async function find_catalog() {
     As side effects, this kicks off a new download attempt, and also consolidates
     any newly downloaded catalog into the current updated catalog.
   */
-  if (app_config.github.use_catalog === false) {
+  if (app_config.remote_catalog.enable_updates === false) {
     return load_catalog(Catalog.preinstalled_path, true)
     .catch(() => null);
   }
@@ -268,7 +268,7 @@ function load_remote_catalog() {
   /*
     Check the catalog for updates, downloading it into the downloaded path if it has changed
   */
-  const {username, repository, branch} = app_config.github
+  const {username, repository, branch} = app_config.remote_catalog
 
   const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
   const index_path = 'index.json';
@@ -336,8 +336,10 @@ function sleep(ms) {
 }
 
 ipcMain.on('upload', async (event, catalog_entry) => {
+  const program_title = catalog_entry.title
   const program_path = catalog_entry.binary
-  console.log('loading program with label: ' + program_path);
+
+  console.log(`loading program "${program_title}" from path: ${program_path}`);
 
   var avrgirl = new Avrgirl({
     board: 'leonardo'
