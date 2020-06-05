@@ -234,7 +234,8 @@ async function find_catalog() {
     As side effects, this kicks off a new download attempt, and also consolidates
     any newly downloaded catalog into the current updated catalog.
   */
-  if (app_config.remote_catalog.enable_updates === false) {
+  if (!app_config.remote_catalog || app_config.remote_catalog.enable_updates === false) {
+    console.log("catalog updates disabled -- using preinstalled catalog")
     return load_catalog(Catalog.preinstalled_path, true)
       .catch((error) => {
         console.log('error with preinstalled catalog: ' + error)
