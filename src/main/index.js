@@ -214,7 +214,7 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
       console.log('Catalog loaded and validated successfully');
       console.log('Catalog path: ' + catalog.source_path)
-      console.log('Catalog contents: ' + JSON.stringify(catalog.catalog))
+      console.log('Catalog contents: ' + JSON.stringify(catalog.catalog, null, 2))
 
       return catalog;
     }).catch((error) => {
