@@ -4,7 +4,7 @@
         <template v-for="entry in catalog.entries">
           <div v-bind:class="entry._cssClass">
             <img v-bind:src="entry.icon"
-                 v-on:click="entrySelect(entry.path)"
+                 v-on:click="entrySelect(entry)"
                  class="entryImage"
             />
             <h3 class="entryTitle"> {{ entry.title }} </h3>
@@ -57,12 +57,11 @@
       }
     },
     methods: {
-      entrySelect: function (path) {
-        console.log("selected: " + path);
+      entrySelect: function (entry) {
+        console.log("selected: " + entry.path);
 
         this.resetEntrySelect();
 
-        const entry = this.entryFromPath(path);
         entry._cssClass += " selectedEntryTile";
 
         this.selection = {
@@ -137,12 +136,6 @@
       },
       resetLoadingFeedback: function () {
         this.loading.feedback = this.loading.initialFeedback;
-      },
-      entryFromPath: function (path) {
-        for (var entry of this.catalog.entries)
-          if (path === entry.path)
-            return entry;
-        return null;
       },
       handle_catalog: function(catalog) {
         console.log('handling catalog: ' + catalog);
