@@ -1,12 +1,18 @@
 {
   "type": "object",
-  "required": ["entries", "upload"],
+  "required": ["entries", "upload", "source"],
   "properties": {
-    "landing": {
+    "source": {
       "type": "object",
-      "required": ["title", "description"],
+      "required": ["name", "version", "homepage", "license", "author"],
       "properties": {
-        "title": {"type": "string"},
+        "name": {"type": "string"},
+        "version": {"type": "string"},
+        "hash": {"type": "string"},
+        "homepage": {"type": "string"},
+        "license": {"type": "string"},
+        "author": {"type": "string"},
+        "brief": {"type": "string"},
         "description": {"type": "string"}
       }
     },

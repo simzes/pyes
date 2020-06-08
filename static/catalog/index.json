@@ -1,6 +1,11 @@
 {
-  "landing": {
-    "title": "info about my application",
+  "source": {
+    "name": "name of the catalog",
+    "version": "0.1.0",
+    "homepage": "wheretogo.com",
+    "license": "type of license",
+    "author": "simzes",
+    "brief": "stuff that will display if there's no markdown",
     "description": "landing.md"
   },
   "upload": {
