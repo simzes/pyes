@@ -48,7 +48,7 @@
             path: "unique label", // the path to the folder where this entry is
             title: "text about the folder", // the text to use if markdown is not present
             icon: "image src", // the path to use in an image element
-            description: "html from markdown", // the html to include in the entry description
+            markdown: "html from markdown", // the html to include in the entry description
             binary: "path/to/hexfile", // the path to the program binary
           },
           ...
