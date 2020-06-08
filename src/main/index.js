@@ -1,3 +1,13 @@
+/*
+  A program to manage a built-in and remote program catalog, present the
+  catalog via a UI (in App.vue) that communicates over IPC, and respond to
+  user selections about which programs to upload.
+
+  The Catalog object manages most interactions with the remote catalog. IPC
+  functions respond to requests from the UI, which ask for the catalog or an
+  upload.
+*/
+
 import { app, BrowserWindow, ipcMain } from 'electron'
 
 const axios = require('axios')
