@@ -1,8 +1,8 @@
 {
-  "name": "progcat_arduino",
+  "name": "progcat",
   "version": "0.1.0",
   "author": "simon <dev@simonsbench.net>",
-  "description": "",
+  "description": "Progcat (program catalog): a UI utility for interacting with mcus",
   "license": null,
   "homepage": "https://www.hedgeproject.org/progcat",
   "main": "./dist/electron/main.js",
@@ -18,8 +18,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "progcat_arduino",
-    "appId": "org.hedgeproject.progcat_arduino",
+    "productName": "progcat",
+    "appId": "org.hedgeproject.progcat",
     "directories": {
       "output": "build",
       "buildResources": "icons"
