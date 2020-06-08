@@ -146,6 +146,7 @@
         delete this.loading.async_result;
       },
       bumpLoading: function () {
+        /* Handles adding another dot to Loading..., and resetting when done */
         console.log('loading bump!');
         if (this.loading.feedback.length >= this.loading.maxFeedback) {
           this.resetLoadingFeedback()
