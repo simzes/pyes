@@ -10,8 +10,7 @@ const showdown  = require('showdown');
 const Ajv = require('ajv');
 
 /**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
+ * Set `__static` path to static files in production, and the static directory for development
  */
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
@@ -86,6 +85,24 @@ app.on('ready', () => {
  */
 
 class Catalog {
+  /**
+  * An object for loading, validating, and modifying a catalog's contents for
+  * presentation.
+  *
+  * A catalog is initialized with the directory where it is based; this is
+  * where the index file (index.json) is located, which holds or locates all
+  * information and files for the catalog.
+  *
+  * A catalog can be local, and its contents are checked on disk. It can also
+  * be remote, and its contents are downloaded first, then checked as a local
+  * catalog.
+  *
+  * First, the index file is validated against a json schema; then, its files
+  * are downloaded, if remote, then all schemes checked for existence. Files
+  * that need conversion, like the markdown files that become html, are
+  * converted. For use in the web UI, all referenced/sourced files are
+  * converted to absolute and html-format paths.
+  */
   REQUIRED_FILES = [
     'icon',
     'description',
@@ -100,6 +117,11 @@ class Catalog {
   }
 
   load_contents() {
+    /*
+      Checks existence of files for a local catalog, or downloads them if remote
+
+      Returns a Promise over the success of the contents checking
+    */
     let agg = []
 
     if (this.remote_source) {
@@ -123,7 +145,10 @@ class Catalog {
 
   * _properties(entry_properties=null) {
     /*
-      returns an iterator over all the entries in the catalog, with form {entry: entry, relative_path: <path>}
+      Returns an iterator over a collection of properties of each entry in the
+      catalog, with form {entry: entry, property: <property label>}
+
+      If no entry_properties are given, the REQUIRED_FILES collection is used
     */
     if (entry_properties == null) {
       entry_properties = this.REQUIRED_FILES
@@ -140,6 +165,9 @@ class Catalog {
   }
 
   validate_catalog() {
+    /*
+      Check the catalog index against the schema at static/catalog_schema.json
+    */
     const schema = jetpack.read(path.join(__static, "catalog_schema.json"), "json");
 
     if (!this.contents) throw "no catalog found";
@@ -153,6 +181,12 @@ class Catalog {
   }
 
   localize_catalog() {
+    /*
+      Creates absolute paths for all file-referencing properties
+
+      Icons are given a file:// prefix, as these are used as an image source
+      in the web UI
+    */
     const prefix = 'file://';
 
     for (var {entry, property} of this._properties()) {
@@ -164,6 +198,12 @@ class Catalog {
   }
 
   convert_markdown() {
+    /*
+      Converts referenced markdown files to their html contents
+
+      Markdown files are referenced in the "description" field, and their
+      converted html contents are stored into the "markdown" field.
+    */
     const converter = new showdown.Converter();
 
     this.contents.landing = { title: "", markdown: "" }
@@ -189,19 +229,28 @@ class Catalog {
   }
 
   static get preinstalled_path() {
+    /* Location for the preinstalled, static catalog shipped with the app */
     return path.join(__static, 'catalog');
   }
 
   static get updated_path() {
+    /* Location for the validated, updated catalog */
     return path.join(app.getPath('userData'), 'catalog');
   }
 
   static get downloaded_path() {
+    /* Location for new catalog downloads, before validation */
     return path.join(app.getPath('userData'), 'tmp_catalog');
   }
 }
 
 function load_catalog(source, remote_source=null) {
+  /*
+    Loads the local or remote (set remote_source to a base URL) into a Catalog
+    object
+
+    Returns a Promise<Catalog> over the loading operation
+  */
   console.log('loading catalog from path: ' + source)
 
   const catalog = new Catalog(source, remote_source);
@@ -230,9 +279,15 @@ function load_catalog(source, remote_source=null) {
 
 async function find_catalog() {
   /*
-    Find the appropriate catalog; prefers the recently downloaded catalog to
-    any previously downloaded catalog. Prefers a previously downloaded one to
-    the preinstalled catalog.
+    Finds the appropriate catalog for the application's configuration and state
+
+    Returns a promise containing the catalog
+
+    If no remote_catalog standza exists, or if enable_updates is disabled,
+    the preinstalled catalog is loaded.
+
+    Otherwise, the most recently downloaded and validated catalog is
+    preferred; no new download attempt will be return.
 
     As side effects, this kicks off a new download attempt, and also consolidates
     any newly downloaded catalog into the current updated catalog.
@@ -344,6 +399,10 @@ function sleep(ms) {
 }
 
 ipcMain.on('upload', async (event, catalog_entry, catalog) => {
+  /*
+    Uploads the program corresponding to the catalog entry onto the board
+  */
+
   new Promise((resolve, reject) => {
     const program_title = catalog_entry.title
     const program_path = catalog_entry.binary
