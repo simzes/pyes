@@ -36,13 +36,21 @@
   const {  ipcRenderer } = require('electron');
 
   export default {
+    /*
+      Catalog sets up an html page structured around catalog entries, and one
+      selected entry.
+    */
     name: 'catalog',
     data: () => {
       return {
         selection: null,
+          /* the entry selected and displayed */
         loading: { inProgress: false, feedback: "", initialFeedback: "Loading...", maxFeedback: 20 },
+          /* the structure for handling loading feedback, and blocking extraneous clicks */
         catalog: null,
-        /* Catalog example:
+        /* The catalog
+
+        Example:
         [
           {
             path: "unique label", // the path to the folder where this entry is
@@ -58,6 +66,7 @@
     },
     methods: {
       entrySelect: function (entry) {
+        /* Updates the display for a selection */
         console.log("selected: " + entry.path);
 
         this.resetEntrySelect();
@@ -70,6 +79,7 @@
         }
       },
       entryDeselect: function () {
+        /* Resets the display for the landing selection */
         this.resetEntrySelect();
 
         this.selection = {
@@ -79,6 +89,7 @@
         }
       },
       resetEntrySelect: function () {
+        /* Sets all entry css classes to unselected (used for border) */
         for (const entry of this.catalog.entries) {
           entry._cssClass = "entryTile";
         }
@@ -116,12 +127,20 @@
         })
       },
       uploadSend: function () {
+        /* Sends the selected entry and catalog for upload
+
+        Returns a promise object of when the upload is finished
+
+        Works in conjunction with uploadReply, which calls into the
+        async_result function set up in this method
+       */
         return new Promise((resolve, reject) => {
           this.loading.async_result = resolve;
           this.$electron.ipcRenderer.send('upload', this.selection.entry, this.catalog);
         });
       },
       uploadReply: function (event, arg) {
+        /* Registered listener function for upload_reply */
         console.log('upload result called!')
         this.loading.async_result(arg)
         delete this.loading.async_result;
@@ -142,10 +161,15 @@
       }
     },
     created: function() {
+      /* Lifecycle function: requests the catalog, and sets up the landing entry */
       this.catalog = this.$electron.ipcRenderer.sendSync('catalog');
       this.entryDeselect();
     },
     mounted: function () {
+      /*
+        Lifecycle function: sets up the upload_reply listener (needed for
+        asynchronous/background uploading)
+      */
       this.$electron.ipcRenderer.on('upload_reply', this.uploadReply);
 
     }
