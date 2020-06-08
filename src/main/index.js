@@ -62,7 +62,7 @@ app.on('activate', () => {
 const app_config = jetpack.read(path.join(__static, './config.json'), 'json');
 
 console.log('app config: ')
-console.log(JSON.stringify(app_config))
+console.log(JSON.stringify(app_config, null, 2))
 
 /**
  * Auto Updater
