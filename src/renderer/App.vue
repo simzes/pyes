@@ -110,8 +110,7 @@
 
         Promise.resolve()
         .then(() => {
-          this.resetLoadingFeedback();
-
+          this.bumpLoading(true)
           this.interval = setInterval(function () {
             this.bumpLoading()
           }.bind(this), 750);
@@ -145,17 +144,14 @@
         this.loading.async_result(arg)
         delete this.loading.async_result;
       },
-      bumpLoading: function () {
+      bumpLoading: function (first_setup=false) {
         /* Handles adding another dot to Loading..., and resetting when done */
         console.log('loading bump!');
-        if (this.loading.feedback.length >= this.loading.maxFeedback) {
-          this.resetLoadingFeedback()
-          return;
+        if (first_setup || this.loading.feedback.length >= this.loading.maxFeedback) {
+          this.loading.feedback = this.loading.initialFeedback;
+          return
         }
         this.loading.feedback += ".";
-      },
-      resetLoadingFeedback: function () {
-        this.loading.feedback = this.loading.initialFeedback;
       },
       handle_catalog: function(catalog) {
         console.log('handling catalog: ' + catalog);
