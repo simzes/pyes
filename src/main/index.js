@@ -92,9 +92,8 @@ class Catalog {
     'binary',
   ]
 
-  constructor(source_path, is_preinstalled, remote_source) {
+  constructor(source_path, remote_source) {
     this.source_path = source_path
-    this.is_preinstalled = is_preinstalled
     this.remote_source = remote_source
 
     this.contents = jetpack.read(path.join(this.source_path, 'index.json'), 'json');
@@ -122,14 +121,6 @@ class Catalog {
     return Promise.all(agg);
   }
 
-  get catalog() {
-    return this.contents
-  }
-
-  get entries() {
-    return this.contents.entries
-  }
-
   * _properties(entry_properties=null) {
     /*
       returns an iterator over all the entries in the catalog, with form {entry: entry, relative_path: <path>}
@@ -138,7 +129,7 @@ class Catalog {
       entry_properties = this.REQUIRED_FILES
     }
 
-    for (const entry of this.entries) {
+    for (const entry of this.contents.entries) {
       for (const prop of entry_properties) {
         yield {
           entry: entry,
@@ -151,11 +142,11 @@ class Catalog {
   validate_catalog() {
     const schema = jetpack.read(path.join(__static, "catalog_schema.json"), "json");
 
-    if (!this.catalog) throw "no catalog found";
+    if (!this.contents) throw "no catalog found";
     if (!schema) throw "no schema found";
 
     const ajv = new Ajv();
-    const valid = ajv.validate(schema, this.catalog);
+    const valid = ajv.validate(schema, this.contents);
 
     if (!valid) throw "catalog invalid";
     console.log("catalog index passed validation");
@@ -175,7 +166,7 @@ class Catalog {
   convert_markdown() {
     const converter = new showdown.Converter();
 
-    this.catalog.landing = { title: "", markdown: "" }
+    this.contents.landing = { title: "", markdown: "" }
 
     if (this.contents.source.description) {
       const markdown_contents = jetpack.read(path.join(this.source_path, this.contents.source.description))
@@ -210,10 +201,10 @@ class Catalog {
   }
 }
 
-function load_catalog(source, is_preinstalled=false, remote_source=null) {
+function load_catalog(source, remote_source=null) {
   console.log('loading catalog from path: ' + source)
 
-  const catalog = new Catalog(source, is_preinstalled, remote_source);
+  const catalog = new Catalog(source, remote_source);
 
   return Promise.resolve()
     .then(() => catalog.validate_catalog())
@@ -226,7 +217,7 @@ function load_catalog(source, is_preinstalled=false, remote_source=null) {
 
       console.log('Catalog loaded and validated successfully');
       console.log('Catalog path: ' + catalog.source_path)
-      console.log('Catalog contents: ' + JSON.stringify(catalog.catalog, null, 2))
+      console.log('Catalog contents: ' + JSON.stringify(catalog.contents, null, 2))
 
       return catalog;
     }).catch((error) => {
@@ -248,7 +239,7 @@ async function find_catalog() {
   */
   if (!app_config.remote_catalog || app_config.remote_catalog.enable_updates === false) {
     console.log("catalog updates disabled -- using preinstalled catalog")
-    return load_catalog(Catalog.preinstalled_path, true)
+    return load_catalog(Catalog.preinstalled_path)
       .catch((error) => {
         console.log('error with preinstalled catalog: ' + error)
         return null;
@@ -267,7 +258,7 @@ async function find_catalog() {
     })
     .catch((error) => {
       console.log("error with updated catalog -- using the preinstalled catalog")
-      return load_catalog(Catalog.preinstalled_path, true)
+      return load_catalog(Catalog.preinstalled_path)
     })
     .catch((error) => {
       // catalog or null
@@ -296,7 +287,7 @@ function load_remote_catalog() {
     .then(() => {
       //console.log('downloaded catalog index successfully');
 
-      const catalog = load_catalog(dest_base, false, catalog_url);
+      const catalog = load_catalog(dest_base, catalog_url);
 
       //console.log("catalog contents: " + JSON.stringify(catalog.catalog))
 
