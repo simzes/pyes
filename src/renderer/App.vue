@@ -153,9 +153,6 @@
         }
         this.loading.feedback += ".";
       },
-      handle_catalog: function(catalog) {
-        console.log('handling catalog: ' + catalog);
-      }
     },
     created: function() {
       /* Lifecycle function: requests the catalog, and sets up the landing entry */
