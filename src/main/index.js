@@ -119,11 +119,9 @@ class Catalog {
     'binary',
   ]
 
-  constructor(source_path, remote_source) {
+  constructor(source_path, remote_stanza) {
     this.source_path = source_path
-    this.remote_source = remote_source
-
-    this.contents = jetpack.read(path.join(this.source_path, 'index.json'), 'json');
+    this.remote_stanza = remote_stanza
   }
 
   load_contents() {
@@ -132,25 +130,41 @@ class Catalog {
 
       Returns a Promise over the success of the contents checking
     */
-    let agg = []
+    const index_path = 'index.json';
 
-    if (this.remote_source) {
-      if (this.contents.source.description) {
-        agg.push(download_catalog_path(this.remote_source, this.source_path, this.contents.source.description))
-      }
-      for (const {entry, property} of this._properties()) {
-        agg.push(download_catalog_path(this.remote_source, this.source_path, path.join(entry.path, entry[property])));
-      }
+    if (this.remote_stanza) {
+      const {username, repository, branch} = this.remote_stanza
+
+      const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
+      const dest_base = Catalog.downloaded_path;
+
+      return download_catalog_path(catalog_url, dest_base, index_path)
+      .then(() => {
+        let agg = []
+
+        this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
+
+        if (this.contents.source.description) {
+          agg.push(download_catalog_path(catalog_url, this.source_path, this.contents.source.description))
+        }
+        for (const {entry, property} of this._properties()) {
+          agg.push(download_catalog_path(catalog_url, this.source_path, path.join(entry.path, entry[property])));
+        }
+
+        return Promise.all(agg);
+      })
     } else {
+      this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
+
       for (var {entry, property} of this._properties()) {
         const file_path = path.join(this.source_path, entry.path, entry[property])
         if (!jetpack.exists(file_path)) {
           throw `Missing catalog file: ${file_path}`;
         }
       }
-    }
 
-    return Promise.all(agg);
+      return Promise.resolve();
+    }
   }
 
   * _properties(entry_properties=null) {
@@ -254,7 +268,7 @@ class Catalog {
   }
 }
 
-function load_catalog(source, remote_source=null) {
+function load_catalog(source, remote_stanza=null) {
   /*
     Loads the local or remote (set remote_source to a base URL) into a Catalog
     object
@@ -263,10 +277,9 @@ function load_catalog(source, remote_source=null) {
   */
   console.log('loading catalog from path: ' + source)
 
-  const catalog = new Catalog(source, remote_source);
+  const catalog = new Catalog(source, remote_stanza);
 
   return Promise.resolve()
-    .then(() => catalog.validate_catalog())
     .then(() => catalog.load_contents())
     .then(() => {
       console.log("validating/localizing content")
@@ -341,27 +354,12 @@ function load_remote_catalog() {
   /*
     Check the catalog for updates, downloading it into the downloaded path if it has changed
   */
-  const {username, repository, branch} = app_config.remote_catalog
-
-  const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
-  const index_path = 'index.json';
-
-  const dest_base = Catalog.downloaded_path;
-
-  return download_catalog_path(catalog_url, dest_base, index_path)
-    .then(() => {
-      //console.log('downloaded catalog index successfully');
-
-      const catalog = load_catalog(dest_base, catalog_url);
-
-      //console.log("catalog contents: " + JSON.stringify(catalog.catalog))
-
-      return catalog;
-    }).catch((error) => {
-      console.log('error with catalog update ' + index_path + ': ' + error);
+    return load_catalog(Catalog.downloaded_path, app_config.remote_catalog)
+    .catch((error) => {
+      console.log('error with catalog update: ' + error);
       console.log(error.stack);
 
-      jetpack.remove(dest_base);
+      jetpack.remove(Catalog.downloaded_path);
     });
 }
 
@@ -377,7 +375,7 @@ function download_catalog_path(base_url, base_path, download_path) {
       jetpack.write(dest_path, response.data);
       return dest_path;
     }).catch(error => {
-      console.log("download for " + dest_path + " unsuccessful");
+      console.log("download for " + dest_path + "\n\t from " + source_url + " unsuccessful");
       throw error;
     })
 }
