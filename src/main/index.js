@@ -413,6 +413,7 @@ ipcMain.on('upload', async (event, catalog_entry, catalog) => {
 
     if (!jetpack.exists(program_path)) {
       reject("path doesn't exist: " + program_path);
+      return;
     }
 
     avrgirl.flash(program_path, function (error) {
