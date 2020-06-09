@@ -352,22 +352,16 @@ async function find_catalog() {
     })
     .finally((catalog) => {
       // kick off download attempt of catalog
-      load_remote_catalog();
+      load_catalog(Catalog.downloaded_path, app_config.remote_catalog)
+      .catch((error) => {
+        console.log('error with catalog update: ' + error);
+        console.log(error.stack);
+
+        jetpack.remove(Catalog.downloaded_path);
+      });
+
       return catalog;
     })
-}
-
-function load_remote_catalog() {
-  /*
-    Check the catalog for updates, downloading it into the downloaded path if it has changed
-  */
-    return load_catalog(Catalog.downloaded_path, app_config.remote_catalog)
-    .catch((error) => {
-      console.log('error with catalog update: ' + error);
-      console.log(error.stack);
-
-      jetpack.remove(Catalog.downloaded_path);
-    });
 }
 
 function download_catalog_path(source_url, download_path) {
