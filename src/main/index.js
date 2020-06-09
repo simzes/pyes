@@ -383,15 +383,6 @@ function download_catalog_path(source_url, download_path) {
     })
 }
 
-const download_url = "https://upload.wikimedia.org/wikipedia/commons/5/5b/Name.jpg"
-
-const data_path = app.getPath('userData');
-  axios.get(download_url, {responseType: 'arraybuffer'})
-  .then(response => {
-    console.log("writing picture to: " + data_path);
-    jetpack.write(path.join(data_path, 'test_download.jpg'), response.data);
-  });
-
 ipcMain.on('catalog', async (event) => {
   console.log('loading catalog for window');
   const catalog = await find_catalog()
