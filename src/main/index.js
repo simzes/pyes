@@ -124,6 +124,10 @@ class Catalog {
     this.remote_stanza = remote_stanza
   }
 
+  _download(source_url, dest, relative_path) {
+    return download_catalog_path(source_url + relative_path, path.join(dest, relative_path))
+  }
+
   load_contents() {
     /*
       Checks existence of files for a local catalog, or downloads them if remote
@@ -138,17 +142,19 @@ class Catalog {
       const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
       const dest_base = Catalog.downloaded_path;
 
-      return download_catalog_path(catalog_url, dest_base, index_path)
+      return this._download(catalog_url, dest_base, index_path)
       .then(() => {
         let agg = []
 
         this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
 
+        // console.log("Index downloaded: " + JSON.stringify(this.contents, null, 2))
+
         if (this.contents.source.description) {
-          agg.push(download_catalog_path(catalog_url, this.source_path, this.contents.source.description))
+          agg.push(this._download(catalog_url, this.source_path, this.contents.source.description))
         }
         for (const {entry, property} of this._properties()) {
-          agg.push(download_catalog_path(catalog_url, this.source_path, path.join(entry.path, entry[property])));
+          agg.push(this._download(catalog_url, this.source_path, path.join(entry.path, entry[property])));
         }
 
         return Promise.all(agg);
@@ -363,19 +369,16 @@ function load_remote_catalog() {
     });
 }
 
-function download_catalog_path(base_url, base_path, download_path) {
-  const source_url = base_url + download_path;
-  const dest_path = path.join(base_path, download_path);
-
-  //console.log("requesting: " + source_url + "\n    into: " + dest_path)
+function download_catalog_path(source_url, download_path) {
+  // console.log("requesting: " + source_url + "\n    into: " + download_path)
 
   return axios.get(source_url, {responseType: 'arraybuffer'})
    .then(response => {
-      //console.log("download for " + dest_path + " successful: " + response.status);
-      jetpack.write(dest_path, response.data);
-      return dest_path;
+      // console.log("download for " + download_path + " successful: " + response.status);
+      jetpack.write(download_path, response.data);
+      return download_path;
     }).catch(error => {
-      console.log("download for " + dest_path + "\n\t from " + source_url + " unsuccessful");
+      console.log("download for " + download_path + "\n\t from " + source_url + " unsuccessful");
       throw error;
     })
 }
