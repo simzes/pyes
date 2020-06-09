@@ -140,7 +140,7 @@ class Catalog {
       const {username, repository, branch} = this.remote_stanza
 
       const catalog_url = `https://raw.githubusercontent.com/${username}/${repository}/${branch}/`;
-      const dest_base = Catalog.downloaded_path;
+      const dest_base = this.source_path;
 
       return this._download(catalog_url, dest_base, index_path)
       .then(() => {
@@ -293,13 +293,11 @@ function load_catalog(source, remote_stanza=null) {
       catalog.localize_catalog();
       catalog.convert_markdown();
 
-      console.log('Catalog loaded and validated successfully');
-      console.log('Catalog path: ' + catalog.source_path)
-      console.log('Catalog contents: ' + JSON.stringify(catalog.contents, null, 2))
+      console.log(`Catalog from ${catalog.source_path} loaded and validated successfully`);
 
       return catalog;
     }).catch((error) => {
-      console.log('error in catalog creation: ' + error)
+      console.log(`Catalog from ${catalog.source_path} found error loading: ` + error)
       console.log(error.stack)
 
       throw error;
@@ -370,7 +368,7 @@ function load_remote_catalog() {
 }
 
 function download_catalog_path(source_url, download_path) {
-  // console.log("requesting: " + source_url + "\n    into: " + download_path)
+  /* Downloads the source_url into download_path as arraybuffer data */
 
   return axios.get(source_url, {responseType: 'arraybuffer'})
    .then(response => {
