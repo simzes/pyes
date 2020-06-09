@@ -149,6 +149,7 @@ class Catalog {
         this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
 
         // console.log("Index downloaded: " + JSON.stringify(this.contents, null, 2))
+        this._validate_catalog()
 
         if (this.contents.source.description) {
           agg.push(this._download(catalog_url, this.source_path, this.contents.source.description))
@@ -161,6 +162,8 @@ class Catalog {
       })
     } else {
       this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
+
+      this._validate_catalog()
 
       for (var {entry, property} of this._properties()) {
         const file_path = path.join(this.source_path, entry.path, entry[property])
@@ -194,7 +197,7 @@ class Catalog {
     }
   }
 
-  validate_catalog() {
+  _validate_catalog() {
     /*
       Check the catalog index against the schema at static/catalog_schema.json
     */
