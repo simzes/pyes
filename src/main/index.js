@@ -391,10 +391,6 @@ ipcMain.on('catalog', async (event) => {
   }
 });
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 ipcMain.on('upload', async (event, catalog_entry, catalog) => {
   /*
     Uploads the program corresponding to the catalog entry onto the board
