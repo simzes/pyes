@@ -164,14 +164,31 @@ class Catalog {
         // console.log("Index downloaded: " + JSON.stringify(this.contents, null, 2))
         this._validate_catalog()
 
-        if (this.contents.source.description) {
-          agg.push(this._download(catalog_url, this.source_path, this.contents.source.description))
-        }
-        for (const {entry, property} of this._properties()) {
-          agg.push(this._download(catalog_url, this.source_path, path.join(entry.path, entry[property])));
-        }
+        // don't proceed with download if there is an updated catalog and its version differs
+        return load_catalog(Catalog.updated_path)
+        .catch(() => null) // catch and drop no catalog found
+        .then((ucatalog) => {
+          // ucatalog null if nonexistant or invalid
+          if (ucatalog && ucatalog.contents.source.version === this.contents.source.version) {
+            console.log("Found downloaded remote catalog with same version as remote: " + this.contents.source.version)
+            throw "remote catalog is unchanged -- giving up on fetching";
+          }
 
-        return Promise.all(agg);
+          if (!ucatalog)
+            console.log("Found no downloaded remote")
+
+          if (ucatalog)
+            console.log("Found downloaded remote catalog with differing version -- have: " + ucatalog.contents.source.version + ", remote: " + this.contents.source.version)
+
+          if (this.contents.source.description) {
+            agg.push(this._download(catalog_url, this.source_path, this.contents.source.description))
+          }
+          for (const {entry, property} of this._properties()) {
+            agg.push(this._download(catalog_url, this.source_path, path.join(entry.path, entry[property])));
+          }
+
+          return Promise.all(agg);
+        })
       })
     } else {
       this.contents = jetpack.read(path.join(this.source_path, index_path), 'json');
