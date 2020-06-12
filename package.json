@@ -1,10 +1,10 @@
 {
-  "name": "progcat",
+  "name": "pyes",
   "version": "0.1.0",
   "author": "simon <dev@simonsbench.net>",
-  "description": "Progcat (program catalog): a UI utility for interacting with mcus",
+  "description": "Pyes (program-your-embedded-system): a UI utility for interacting with mcus",
   "license": null,
-  "homepage": "https://www.hedgeproject.org/progcat",
+  "homepage": "https://www.hedgeproject.org/pyes",
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder -l",
@@ -18,8 +18,8 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "progcat",
-    "appId": "org.hedgeproject.progcat",
+    "productName": "pyes",
+    "appId": "org.hedgeproject.pyes",
     "directories": {
       "output": "build",
       "buildResources": "icons"

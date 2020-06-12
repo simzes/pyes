@@ -1,11 +1,11 @@
 {
   "source": {
-    "name": "name of the catalog",
+    "name": "Pyes default catalog",
     "version": "0.1.0",
-    "homepage": "wheretogo.com",
-    "license": "type of license",
+    "homepage": "http://hedgeproject.org/pyes",
+    "license": "MIT",
     "author": "simzes",
-    "brief": "stuff that will display if there's no markdown",
+    "brief": "A generic, built-in catalog for viewing the program in action",
     "description": "landing.md"
   },
   "upload": {

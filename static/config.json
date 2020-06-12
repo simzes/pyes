@@ -7,7 +7,7 @@
   "remote_catalog": {
     "enable_updates": true,
     "username": "simzes",
-    "repository": "test-bitty-catalog",
-    "branch": "test-progcat"
+    "repository": "test-pyes-catalog",
+    "branch": "master"
   }
 }

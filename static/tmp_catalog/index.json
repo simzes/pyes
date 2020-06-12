@@ -1,0 +1,21 @@
+{
+  "landing": {
+    "title": "info about my application",
+    "description": "some basic info"
+  },
+  "entries": [
+  {
+    "label": "elephant",
+    "title": "Could have been an elephant-bitty",
+    "image": "elephant.jpg",
+    "description": "elephant.md",
+    "binary": "elephant.hex"
+  },
+  {
+    "label": "donkey",
+    "title": "Could have been a donkey-bitty",
+    "image": "donkey.jpg",
+    "description": "donkey.md",
+    "binary": "donkey.hex"
+  }
+]}
