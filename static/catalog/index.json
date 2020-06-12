@@ -14,14 +14,14 @@
   "entries": [
     {
       "path": "elephant",
-      "title": "Wish I was an elephant-bitty",
+      "title": "Elephant Blink",
       "icon": "elephant.jpg",
       "description": "elephant.md",
       "binary": "elephant.hex"
     },
     {
       "path": "donkey",
-      "title": "Wish I was a donkey-bitty",
+      "title": "Donkey Blink",
       "icon": "donkey.jpg",
       "description": "donkey.md",
       "binary": "donkey.hex"
