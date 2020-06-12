@@ -3,9 +3,22 @@
   catalog via a UI (in App.vue) that communicates over IPC, and respond to
   user selections about which programs to upload.
 
+  On start-up, the main process loads its config, and starts up the
+  application’s interface process. After this, the main process responds to
+  requests from the interface window, received over electron’s IPC mechanisms;
+  these are to locate an appropriate catalog, and upload catalog entries. After
+  the catalog has been loaded and sent, any remote catalog is checked for
+  updates.
+
   The Catalog object manages most interactions with the remote catalog. IPC
   functions respond to requests from the UI, which ask for the catalog or an
   upload.
+
+  All application code is built into a webpack. The index.js file is linked-
+  in as “main” by mainConfig in .electron-vue/webpack.main.config.js. In
+  turn, mainConfig is referenced by the webpack build script in .electron-
+  vue/build.js. (This starter-code was provided by simulatedGREG’s electron-
+  vue.)
 */
 
 import { app, BrowserWindow, ipcMain } from 'electron'

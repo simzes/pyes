@@ -38,7 +38,16 @@
   export default {
     /*
       Catalog sets up an html page structured around catalog entries, and one
-      selected entry.
+      selected entry. The css for the page is defined below.
+
+      The catalog communicates with the main process over IPC to retrieve the
+      catalog contents (during created()), and to manage upload requests with
+      upload/uploadReply.
+
+      The App.vue file is referenced by src/renderer/main.js, and its html
+      injected into src/index.ejs. Main.js is linked into the webpack with
+      .electron-vue/webpack.renderer.config.js, and the .electron-vue/build.js
+      script.
     */
     name: 'catalog',
     data: () => {
