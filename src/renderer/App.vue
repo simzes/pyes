@@ -37,6 +37,8 @@
 
   export default {
     /*
+      (c) 2020 simzes
+
       Catalog sets up an html page structured around catalog entries, and one
       selected entry. The css for the page is defined below.
 

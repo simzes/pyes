@@ -3,6 +3,8 @@
   catalog via a UI (in App.vue) that communicates over IPC, and respond to
   user selections about which programs to upload.
 
+  (c) 2020 simzes
+
   On start-up, the main process loads its config, and starts up the
   application’s interface process. After this, the main process responds to
   requests from the interface window, received over electron’s IPC mechanisms;
