@@ -1,5 +1,5 @@
 # Pyes Docs
-Full documentation for pyes is available at https://hedgeproject.org/pyes
+Full documentation for pyes is available at https://simonsbench.net/pyes
 
 ## Quickstart
 
@@ -29,7 +29,7 @@ The source code for pyes can be found at: https://www.github.com/simzes/pyes. Ap
     The catalog holds all embedded programs available to the user, and their associated resources. The catalog is described in an index file, which is in the catalog’s base directory. The index lists each program’s resources (icon, binary, title, etc.), as well as some details on its source and version.
 
 ### Important Files
-<https://hedgeproject.org/pyes#important-files>
+<https://simonsbench.net/pyes#important-files>
 
 ### Important Workflows
-<https://hedgeproject.org/pyes#tasks-and-workflows>
+<https://simonsbench.net/pyes#tasks-and-workflows>
