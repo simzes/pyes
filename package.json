@@ -59,7 +59,7 @@
   "dependencies": {
     "ajv": "^6.12.2",
     "avrgirl-arduino": "^4.2.3",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "fs-jetpack": "^2.4.0",
     "showdown": "^1.9.1",
     "vue": "^2.5.16",
