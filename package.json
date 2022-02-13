@@ -57,7 +57,7 @@
     }
   },
   "dependencies": {
-    "ajv": "^6.12.2",
+    "ajv": "^6.12.3",
     "avrgirl-arduino": "^4.2.3",
     "axios": "^0.19.2",
     "fs-jetpack": "^2.4.0",
